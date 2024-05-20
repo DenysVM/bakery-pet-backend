@@ -14,7 +14,8 @@ app.use(express.json());
 
 const allowedOrigins = [
   'http://localhost:3000', 
-  'https://denysvm.github.io/bakery-pet', 
+  'https://denysvm.github.io/bakery-pet',
+  'https://denysvm.github.io',  
   'https://bakery-pet-backend.onrender.com' 
 ];
 
