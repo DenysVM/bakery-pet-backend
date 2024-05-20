@@ -14,20 +14,23 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    match: [/\S+@\S+\.\S+/, 'is invalid'],
   },
   password: {
     type: String,
     required: true,
+    minlength: 8,
   },
   phone: {
     type: String,
     required: true,
+    match: [/^\d{10}$/, 'is invalid'],
   },
   address: {
     street: { type: String, required: true },
+    houseNumber: { type: String, required: true },
+    apartmentNumber: { type: String, required: true },
     city: { type: String, required: true },
-    state: { type: String, required: true },
-    zip: { type: String, required: true },
   },
   role: {
     type: String,

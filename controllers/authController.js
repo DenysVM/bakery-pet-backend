@@ -1,81 +1,60 @@
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getProfile } from '../services/authService';
 
-dotenv.config();
+const AuthContext = createContext();
 
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
-  });
-};
+export const AuthProvider = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
-const registerUser = async (req, res) => {
-  const { firstName, lastName, email, password, phone, address, role } = req.body;
+  const login = useCallback((userData) => {
+    localStorage.setItem('user', JSON.stringify(userData));
+    setIsAuthenticated(true);
+    setUser(userData);
+  }, []);
 
-  try {
-    const userExists = await User.findOne({ email });
+  const logout = useCallback(() => {
+    localStorage.removeItem('user');
+    setIsAuthenticated(false);
+    setUser(null);
+    navigate('/login');
+  }, [navigate]);
 
-    if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
+  const fetchUserProfile = useCallback(async () => {
+    try {
+      const profile = await getProfile();
+      if (profile) {
+        setUser(profile);
+        setIsAuthenticated(true);
+      }
+    } catch (error) {
+      console.error('Failed to fetch user profile', error);
+      logout();
     }
+  }, [logout]);
 
-    const user = await User.create({
-      firstName,
-      lastName,
-      email,
-      password,
-      phone,
-      address,
-      role,
-    });
-
-    if (user) {
-      res.status(201).json({
-        _id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        phone: user.phone,
-        address: user.address,
-        role: user.role,
-        token: generateToken(user._id),
-      });
-    } else {
-      res.status(400).json({ message: 'Invalid user data' });
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setIsAuthenticated(true);
+        fetchUserProfile();
+      } catch (error) {
+        console.error('Failed to parse user from localStorage', error);
+        localStorage.removeItem('user');
+      }
     }
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
+  }, [fetchUserProfile]);
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-const authUser = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await User.findOne({ email });
-
-    if (user && (await user.matchPassword(password))) {
-      res.json({
-        _id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        phone: user.phone,
-        address: user.address,
-        role: user.role,
-        token: generateToken(user._id),
-      });
-    } else {
-      res.status(401).json({ message: 'Invalid email or password' });
-    }
-  } catch (error) {
-    console.error('Error authenticating user:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
-
-module.exports = {
-  registerUser,
-  authUser,
-};
+export const useAuth = () => useContext(AuthContext);
