@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
   phone: {
     type: String,
     required: true,
-    match: [/^\d{10}$/, 'is invalid'],
+    match: [/^\d+$/, 'is invalid'], // Изменено для поддержки форматов телефонов, содержащих символы + и ()
   },
   address: {
     street: { type: String, required: true },
