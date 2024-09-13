@@ -23,12 +23,41 @@ const createOrder = async (req, res) => {
   }
 };
 
+const getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find().populate('user', 'firstName lastName email');
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching orders', error });
+  }
+};
+
 const getOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user._id });
     res.status(200).json(orders);
   } catch (error) {
     res.status(400).json({ message: 'Error fetching orders', error });
+  }
+};
+
+const updateOrderStatus = async (req, res) => {
+  const { orderId } = req.params;
+  const { status } = req.body;
+
+  try {
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    order.status = status;
+    await order.save();
+
+    res.status(200).json({ message: 'Order status updated', order });
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    res.status(500).json({ message: 'Error updating order status', error });
   }
 };
 
@@ -96,4 +125,4 @@ const deleteOrderItem = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, getOrders, updateOrderItem, deleteOrderItem, deleteOrder };
+module.exports = { createOrder, getAllOrders, getOrders, updateOrderStatus, updateOrderItem, deleteOrderItem, deleteOrder };
