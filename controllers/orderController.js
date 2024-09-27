@@ -1,4 +1,5 @@
 const Order = require('../models/Order');
+const Product = require('../models/Product');
 
 const createOrder = async (req, res) => {
   try {
@@ -125,4 +126,77 @@ const deleteOrderItem = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, getAllOrders, getOrders, updateOrderStatus, updateOrderItem, deleteOrderItem, deleteOrder };
+const addItemToOrder = async (req, res) => {
+  const { orderId } = req.params;
+  const { productId, quantity } = req.body;
+
+  try {
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    const existingItem = order.items.find(
+      (item) => item.productId.toString() === productId
+    );
+
+    if (existingItem) {
+
+      existingItem.quantity += quantity;
+    } else {
+
+      const product = await Product.findById(productId);
+
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+
+      const newItem = {
+        productId: product._id,
+        quantity: quantity,
+        price: product.price,
+      };
+
+      order.items.push(newItem);
+    }
+
+    order.total = order.items.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+
+    await order.save();
+
+    res.status(200).json(order);
+  } catch (error) {
+    console.error('Error adding item to order:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+const getOrderById = async (req, res) => {
+  const { orderId } = req.params;
+
+  try {
+    const order = await Order.findById(orderId).populate('items.productId');
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Проверяем, является ли пользователь владельцем заказа или администратором
+    if (order.user.toString() !== req.user._id.toString() && !req.user.isAdmin) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    res.json(order);
+  } catch (error) {
+    console.error('Error fetching order by ID:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+module.exports = { createOrder, getAllOrders, getOrders, getOrderById, updateOrderStatus, addItemToOrder, updateOrderItem, deleteOrderItem, deleteOrder };
