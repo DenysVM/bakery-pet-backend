@@ -1,24 +1,38 @@
+// models/Product.js
+
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
-  productId: {
+  category: {
     type: String,
     required: true,
-    unique: true,
   },
   name: {
     en: { type: String, required: true },
     ru: { type: String, required: true },
+    pl: { type: String, required: true },
+    uk: { type: String, required: true },
+  },
+  description: {
+    en: { type: String },
+    ru: { type: String },
+    pl: { type: String },
+    uk: { type: String },
+  },
+  composition: {
+    en: { type: String },
+    ru: { type: String },
+    pl: { type: String },
+    uk: { type: String },
+  },
+  calories: {
+    type: Number,
   },
   price: {
     type: Number,
     required: true,
   },
-  description: {
-    en: { type: String },
-    ru: { type: String },
-  },
-  image: {
+  imageUrl: {
     type: String,
   },
 }, {

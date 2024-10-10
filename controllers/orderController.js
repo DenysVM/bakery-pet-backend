@@ -185,7 +185,6 @@ const getOrderById = async (req, res) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    // Проверяем, является ли пользователь владельцем заказа или администратором
     if (order.user.toString() !== req.user._id.toString() && !req.user.isAdmin) {
       return res.status(403).json({ message: 'Access denied' });
     }
@@ -196,7 +195,5 @@ const getOrderById = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
-
 
 module.exports = { createOrder, getAllOrders, getOrders, getOrderById, updateOrderStatus, addItemToOrder, updateOrderItem, deleteOrderItem, deleteOrder };
