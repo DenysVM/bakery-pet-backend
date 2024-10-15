@@ -17,7 +17,9 @@ const allowedOrigins = [
   'http://localhost:3000', 
   'https://denysvm.github.io/bakery-pet',
   'https://denysvm.github.io',  
-  'https://bakery-pet-backend.onrender.com' 
+  'https://bakery-pet-backend.onrender.com',
+  'http://172.20.10.6:3000',
+  'http://172.20.10.6:5000'  
 ];
 
 app.use(cors({
