@@ -46,6 +46,7 @@ const registerUser = async (req, res) => {
       res.status(400).json({ message: 'Invalid user data' });
     }
   } catch (error) {
+    console.log('error', error)
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -76,7 +77,28 @@ const authUser = async (req, res) => {
   }
 };
 
+const updateUserProfile = async (req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    Object.assign(user, updates);
+    await user.save();
+
+    res.json({ message: "Profile updated successfully", user });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({ message: "Error updating profile", error });
+  }
+};
+
 module.exports = {
   registerUser,
   authUser,
+  updateUserProfile,
 };

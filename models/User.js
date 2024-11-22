@@ -24,12 +24,12 @@ const userSchema = new mongoose.Schema({
   phone: {
     type: String,
     required: true,
-    match: [/^\d+$/, 'is invalid'], 
+    match: [/^\d+$/, 'is invalid'],
   },
   address: {
     street: { type: String, required: true },
-    houseNumber: { type: String, required: true },
-    apartmentNumber: { type: String, required: true },
+    houseNumber: { type: String, required: false }, // Сделали необязательным для обновления
+    apartmentNumber: { type: String, required: false }, // Сделали необязательным для обновления
     city: { type: String, required: true },
   },
   role: {

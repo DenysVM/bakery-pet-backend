@@ -11,7 +11,9 @@ router.get('/:orderId', protect, getOrderById);
 
 router.put('/:orderId/items/:itemId', protect, updateOrderItem); 
 router.post('/:orderId/items', protect, addItemToOrder);
-router.put('/:orderId/status', protect, admin, updateOrderStatus);
+router.put('/:orderNumber/status', protect, admin, updateOrderStatus); 
+router.put('/:_id/status', protect, admin, updateOrderStatus);
+// router.put('/:orderId/status', protect, admin, updateOrderStatus);
 router.delete('/:orderId/items/:itemId', protect, deleteOrderItem); 
 router.delete('/:orderId', protect, deleteOrder);
 

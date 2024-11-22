@@ -3,13 +3,14 @@ const Product = require('../models/Product');
 
 const createOrder = async (req, res) => {
   try {
-    const { user, items, address, phone, total } = req.body;
+    const { orderNumber, user, items, address, phone, total } = req.body;
 
     if (!user || !items || !address || !phone || !total) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
     const order = new Order({
+      orderNumber,
       user,
       items,
       address,
@@ -34,26 +35,42 @@ const getAllOrders = async (req, res) => {
 };
 
 const getOrders = async (req, res) => {
+  const { userId } = req.query;
+
   try {
+    if (userId) {
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+
+      const orders = await Order.find({ user: userId }).populate('user', 'firstName lastName email');
+      return res.status(200).json(orders);
+    }
+
     const orders = await Order.find({ user: req.user._id });
     res.status(200).json(orders);
   } catch (error) {
-    res.status(400).json({ message: 'Error fetching orders', error });
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ message: 'Error fetching orders', error });
   }
 };
 
 const updateOrderStatus = async (req, res) => {
-  const { orderId } = req.params;
+  const { orderNumber, _id } = req.params;
+  const orderId = orderNumber || _id; 
   const { status } = req.body;
 
   try {
-    const order = await Order.findById(orderId);
+    const order = orderNumber
+      ? await Order.findOne({ orderNumber }) 
+      : await Order.findById(_id); 
+
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    order.status = status;
-    await order.save();
+    order.status = status; 
+    await order.save(); 
 
     res.status(200).json({ message: 'Order status updated', order });
   } catch (error) {
@@ -61,6 +78,7 @@ const updateOrderStatus = async (req, res) => {
     res.status(500).json({ message: 'Error updating order status', error });
   }
 };
+
 
 const updateOrderItem = async (req, res) => {
   const { orderId, itemId } = req.params;
@@ -113,7 +131,7 @@ const deleteOrderItem = async (req, res) => {
     }
 
     order.items = order.items.filter(item => item._id.toString() !== itemId);
-    
+
     if (order.items.length === 0) {
       await Order.findByIdAndDelete(orderId);
       return res.status(200).json({ message: 'Order deleted successfully' });
@@ -185,7 +203,10 @@ const getOrderById = async (req, res) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    if (order.user.toString() !== req.user._id.toString() && !req.user.isAdmin) {
+    if (
+      req.user.role !== 'admin' &&
+      order.user.toString() !== req.user._id.toString()
+    ) {
       return res.status(403).json({ message: 'Access denied' });
     }
 
@@ -195,5 +216,6 @@ const getOrderById = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 module.exports = { createOrder, getAllOrders, getOrders, getOrderById, updateOrderStatus, addItemToOrder, updateOrderItem, deleteOrderItem, deleteOrder };
