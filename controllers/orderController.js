@@ -28,7 +28,7 @@ const createOrder = async (req, res) => {
     res.status(201).json(newOrder);
   } catch (error) {
     console.error('Error creating order:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error', error });
   }
 };
 
@@ -37,6 +37,7 @@ const getAllOrders = async (req, res) => {
     const orders = await Order.find().populate('user', 'firstName lastName email');
     res.status(200).json(orders);
   } catch (error) {
+    console.error('Error fetching orders:', error);
     res.status(500).json({ message: 'Error fetching orders', error });
   }
 };
@@ -69,15 +70,22 @@ const updateOrderStatus = async (req, res) => {
 
   try {
     const order = orderNumber
-      ? await Order.findOne({ orderNumber }) 
-      : await Order.findById(_id); 
+      ? await Order.findOne({ orderNumber })
+      : await Order.findById(_id);
 
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    order.status = status; 
-    await order.save(); 
+    order.status = status;
+
+    // Убедимся, что userFirstName и userLastName заполнены
+    if (!order.userFirstName || !order.userLastName) {
+      order.userFirstName = order.userFirstName || 'Deleted';
+      order.userLastName = order.userLastName || 'User';
+    }
+
+    await order.save();
 
     res.status(200).json({ message: 'Order status updated', order });
   } catch (error) {
@@ -85,7 +93,6 @@ const updateOrderStatus = async (req, res) => {
     res.status(500).json({ message: 'Error updating order status', error });
   }
 };
-
 
 const updateOrderItem = async (req, res) => {
   const { orderId, itemId } = req.params;
@@ -110,6 +117,7 @@ const updateOrderItem = async (req, res) => {
 
     res.status(200).json(order);
   } catch (error) {
+    console.error('Error updating order item:', error);
     res.status(400).json({ message: 'Error updating order item', error });
   }
 };
@@ -125,6 +133,7 @@ const deleteOrder = async (req, res) => {
     await Order.findByIdAndDelete(orderId);
     res.status(200).json({ message: 'Order deleted successfully' });
   } catch (error) {
+    console.error('Error deleting order:', error);
     res.status(500).json({ message: 'Error deleting order', error });
   }
 };
@@ -147,6 +156,7 @@ const deleteOrderItem = async (req, res) => {
     await order.save();
     res.status(200).json({ message: 'Order item deleted successfully' });
   } catch (error) {
+    console.error('Error deleting order item:', error);
     res.status(500).json({ message: 'Error deleting order item', error });
   }
 };
@@ -167,10 +177,8 @@ const addItemToOrder = async (req, res) => {
     );
 
     if (existingItem) {
-
       existingItem.quantity += quantity;
     } else {
-
       const product = await Product.findById(productId);
 
       if (!product) {
@@ -196,7 +204,7 @@ const addItemToOrder = async (req, res) => {
     res.status(200).json(order);
   } catch (error) {
     console.error('Error adding item to order:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error', error });
   }
 };
 
@@ -220,9 +228,18 @@ const getOrderById = async (req, res) => {
     res.json(order);
   } catch (error) {
     console.error('Error fetching order by ID:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error', error });
   }
 };
 
-
-module.exports = { createOrder, getAllOrders, getOrders, getOrderById, updateOrderStatus, addItemToOrder, updateOrderItem, deleteOrderItem, deleteOrder };
+module.exports = {
+  createOrder,
+  getAllOrders,
+  getOrders,
+  getOrderById,
+  updateOrderStatus,
+  addItemToOrder,
+  updateOrderItem,
+  deleteOrderItem,
+  deleteOrder,
+};
