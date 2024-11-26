@@ -2,26 +2,33 @@ const Order = require('../models/Order');
 const Product = require('../models/Product');
 
 const createOrder = async (req, res) => {
+  const {
+    user,
+    userFirstName,
+    userLastName,
+    items,
+    address,
+    phone,
+    total,
+    orderNumber,
+  } = req.body;
+
   try {
-    const { orderNumber, user, items, address, phone, total } = req.body;
-
-    if (!user || !items || !address || !phone || !total) {
-      return res.status(400).json({ message: 'Missing required fields' });
-    }
-
-    const order = new Order({
-      orderNumber,
+    const newOrder = await Order.create({
       user,
+      userFirstName,
+      userLastName,
       items,
       address,
       phone,
       total,
+      orderNumber,
     });
 
-    await order.save();
-    res.status(201).json(order);
+    res.status(201).json(newOrder);
   } catch (error) {
-    res.status(400).json({ message: 'Error creating order', error });
+    console.error('Error creating order:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
