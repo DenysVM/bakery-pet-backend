@@ -4,7 +4,7 @@ const router = express.Router();
 
 const NOVA_POSHTA_API_URL = 'https://api.novaposhta.ua/v2.0/json/';
 
-router.post('/nova-poshta', async (req, res) => {
+router.post('/', async (req, res) => {
 
   try {
 
