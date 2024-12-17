@@ -2,24 +2,36 @@ const Order = require('../models/Order');
 const Product = require('../models/Product');
 
 const createOrder = async (req, res) => {
-  const {
-    user,
-    userFirstName,
-    userLastName,
-    items,
-    address,
-    phone,
-    total,
-    orderNumber,
-  } = req.body;
-
   try {
+    const {
+      user,
+      userFirstName,
+      userLastName,
+      items,
+      deliveryType,
+      homeDelivery,
+      novaPoshtaDelivery,
+      phone,
+      total,
+      orderNumber,
+    } = req.body;
+
+    // Валидация на сервере: проверяем корректность доставки
+    if (deliveryType === "Home" && !homeDelivery) {
+      return res.status(400).json({ message: "Home delivery address is required" });
+    }
+    if (deliveryType === "Nova Poshta" && !novaPoshtaDelivery) {
+      return res.status(400).json({ message: "Nova Poshta delivery details are required" });
+    }
+
     const newOrder = await Order.create({
       user,
       userFirstName,
       userLastName,
       items,
-      address,
+      deliveryType,
+      homeDelivery: deliveryType === "Home" ? homeDelivery : undefined,
+      novaPoshtaDelivery: deliveryType === "Nova Poshta" ? novaPoshtaDelivery : undefined,
       phone,
       total,
       orderNumber,
@@ -27,8 +39,8 @@ const createOrder = async (req, res) => {
 
     res.status(201).json(newOrder);
   } catch (error) {
-    console.error('Error creating order:', error);
-    res.status(500).json({ message: 'Server error', error });
+    console.error("Error creating order:", error);
+    res.status(500).json({ message: "Server error", error });
   }
 };
 
@@ -51,7 +63,8 @@ const getOrders = async (req, res) => {
         return res.status(403).json({ message: 'Access denied' });
       }
 
-      const orders = await Order.find({ user: userId }).populate('user', 'firstName lastName email');
+      const orders = await Order.find({ user: userId })
+        .populate('user', 'firstName lastName email');
       return res.status(200).json(orders);
     }
 
@@ -231,6 +244,7 @@ const getOrderById = async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 };
+
 
 module.exports = {
   createOrder,
