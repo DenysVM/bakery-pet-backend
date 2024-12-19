@@ -54,7 +54,8 @@ const orderSchema = new mongoose.Schema(
       shortAddress: String,     
       category: String,         
       value: String,            
-      warehouseIndex: String,   
+      warehouseIndex: String,
+      trackingNumber: String,   
     },
     phone: {
       type: String,

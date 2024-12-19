@@ -109,29 +109,44 @@ const updateOrderStatus = async (req, res) => {
 
 const updateOrderItem = async (req, res) => {
   const { orderId, itemId } = req.params;
-  const { quantity } = req.body;
+  const { quantity, trackingNumber } = req.body;
 
   try {
     const order = await Order.findById(orderId);
 
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({ message: "Order not found" });
     }
 
-    const item = order.items.id(itemId);
+    // Если передан `itemId`, обновляем количество для конкретного товара
+    if (itemId) {
+      const item = order.items.id(itemId);
 
-    if (!item) {
-      return res.status(404).json({ message: 'Item not found in order' });
+      if (!item) {
+        return res.status(404).json({ message: "Item not found in order" });
+      }
+
+      if (quantity !== undefined) {
+        item.quantity = quantity;
+        order.total = order.items.reduce((sum, item) => sum + item.quantity * item.price, 0);
+      }
     }
 
-    item.quantity = quantity;
-    order.total = order.items.reduce((sum, item) => sum + item.quantity * item.price, 0);
+    // Если передан `trackingNumber`, обновляем трекинг-номер для доставки "Нова Пошта"
+    if (trackingNumber) {
+      if (order.deliveryType !== "Nova Poshta") {
+        return res.status(400).json({ message: "Invalid delivery type for tracking number" });
+      }
+
+      order.novaPoshtaDelivery.trackingNumber = trackingNumber;
+    }
+
     await order.save();
 
     res.status(200).json(order);
   } catch (error) {
-    console.error('Error updating order item:', error);
-    res.status(400).json({ message: 'Error updating order item', error });
+    console.error("Error updating order item:", error);
+    res.status(400).json({ message: "Error updating order item", error });
   }
 };
 
