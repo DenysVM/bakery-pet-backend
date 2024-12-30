@@ -14,9 +14,9 @@ const createOrder = async (req, res) => {
       phone,
       total,
       orderNumber,
+      comment,
     } = req.body;
 
-    // Валидация на сервере: проверяем корректность доставки
     if (deliveryType === "Home" && !homeDelivery) {
       return res.status(400).json({ message: "Home delivery address is required" });
     }
@@ -35,6 +35,7 @@ const createOrder = async (req, res) => {
       phone,
       total,
       orderNumber,
+      comment: comment || '',
     });
 
     res.status(201).json(newOrder);

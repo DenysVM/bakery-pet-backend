@@ -32,6 +32,7 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
+    comment: { type: String, maxlength: 200 },
     status: {
       type: String,
       enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
@@ -49,13 +50,13 @@ const orderSchema = new mongoose.Schema(
       city: String,
     },
     novaPoshtaDelivery: {
-      novaPoshtaBranch: String, 
-      label: String,            
-      shortAddress: String,     
-      category: String,         
-      value: String,            
+      novaPoshtaBranch: String,
+      label: String,
+      shortAddress: String,
+      category: String,
+      value: String,
       warehouseIndex: String,
-      trackingNumber: String,   
+      trackingNumber: String,
     },
     phone: {
       type: String,
