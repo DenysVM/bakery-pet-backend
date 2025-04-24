@@ -28,8 +28,8 @@ const userSchema = new mongoose.Schema({
   },
   address: {
     street: { type: String, required: true },
-    houseNumber: { type: String, required: false }, // Сделали необязательным для обновления
-    apartmentNumber: { type: String, required: false }, // Сделали необязательным для обновления
+    houseNumber: { type: String, required: false }, 
+    apartmentNumber: { type: String, required: false }, 
     city: { type: String, required: true },
   },
   role: {
@@ -37,6 +37,21 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user',
   },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  emailVerificationToken: {
+    type: String,
+  },
+  emailVerificationExpires: {
+    type: Date,
+  },
+  language: {
+    type: String,
+    enum: ['en', 'ru', 'uk', 'pl'],
+    default: 'en',
+  }
 });
 
 userSchema.pre('save', async function (next) {

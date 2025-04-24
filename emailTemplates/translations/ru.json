@@ -1,0 +1,25 @@
+{
+    "orderStatus": {
+      "title": "Ваш заказ обновлён",
+      "heading": "Обновление заказа — Cozy Bakery",
+      "greeting": "Здравствуйте",
+      "orderMessage": "Статус вашего заказа был изменён на",
+      "trackingNumber": "Номер накладной",
+      "orderDetails": "Вы можете просмотреть детали заказа по ссылке ниже:",
+      "linkText": "Открыть заказ",
+      "thanks": "Спасибо, что выбираете Cozy Bakery!",
+      "signature": "С уважением, команда Cozy Bakery"
+    },
+    "trackingNumber": {
+      "title": "Добавлен номер накладной",
+      "heading": "Новая накладная — Cozy Bakery",
+      "greeting": "Здравствуйте",
+      "orderMessage": "К вашему заказу добавлен номер накладной",
+      "trackingNumber": "Номер накладной",
+      "orderDetails": "Вы можете отследить доставку по ссылке ниже:",
+      "linkText": "Перейти к заказу",
+      "thanks": "Надеемся, вам понравится наша выпечка!",
+      "signature": "С любовью, команда Cozy Bakery"
+    }
+  }
+  

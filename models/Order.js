@@ -15,6 +15,14 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    userEmail: {
+      type: String,
+      required: false,
+    },
+    lang: {
+      type: String,
+      required: false,
+    },    
     items: [
       {
         productId: {

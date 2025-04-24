@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>{{translations.title}}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      background-color: #ffffff;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      margin: 20px 0;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 0.9em;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>{{translations.heading}}</h1>
+    <p>{{translations.greeting}}, {{username}}!</p>
+    <p>{{translations.message}}</p>
+
+    <p>
+      <a href="{{verificationLink}}" class="btn">
+        {{translations.linkText}}
+      </a>
+    </p>
+
+    <p class="footer">{{translations.note}}</p>
+    <p class="footer">{{translations.signature}}</p>
+  </div>
+</body>
+</html>

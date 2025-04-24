@@ -1,0 +1,25 @@
+{
+    "orderStatus": {
+      "title": "Twoje zamówienie zostało zaktualizowane",
+      "heading": "Aktualizacja zamówienia — Cozy Bakery",
+      "greeting": "Witaj",
+      "orderMessage": "Status Twojego zamówienia został zmieniony na",
+      "trackingNumber": "Numer przesyłki",
+      "orderDetails": "Szczegóły zamówienia dostępne pod linkiem:",
+      "linkText": "Zobacz zamówienie",
+      "thanks": "Dziękujemy, że wybrałeś Cozy Bakery!",
+      "signature": "Z pozdrowieniami, zespół Cozy Bakery"
+    },
+    "trackingNumber": {
+      "title": "Dodano numer przesyłki",
+      "heading": "Nowa przesyłka — Cozy Bakery",
+      "greeting": "Witaj",
+      "orderMessage": "Do Twojego zamówienia dodano numer przesyłki",
+      "trackingNumber": "Numer przesyłki",
+      "orderDetails": "Śledzenie przesyłki dostępne pod linkiem:",
+      "linkText": "Przejdź do zamówienia",
+      "thanks": "Mamy nadzieję, że smakowało!",
+      "signature": "Z miłością, zespół Cozy Bakery"
+    }
+  }
+  

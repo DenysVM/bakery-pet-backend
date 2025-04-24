@@ -1,0 +1,33 @@
+{
+    "emails": {
+      "registration": {
+        "title": "Potwierdzenie rejestracji",
+        "heading": "Witamy!",
+        "greeting": "Witaj",
+        "message": "Dziękujemy za rejestrację w naszym serwisie. Aby aktywować swoje konto, proszę potwierdź swój email.",
+        "linkText": "Potwierdź email",
+        "note": "Jeśli się nie rejestrowałeś, zignoruj ten email.",
+        "signature": "Z poważaniem, Zespół wsparcia"
+      },
+      "resetPassword": {
+        "title": "Resetowanie hasła",
+        "heading": "Resetowanie hasła",
+        "greeting": "Witaj",
+        "message": "Otrzymaliśmy prośbę o zresetowanie hasła do Twojego konta.",
+        "linkText": "Zresetuj hasło",
+        "note": "Jeśli nie prosiłeś o resetowanie hasła, zignoruj tę wiadomość.",
+        "signature": "Z poważaniem, Zespół wsparcia"
+      },
+      "orderStatus": {
+        "title": "Aktualizacja statusu zamówienia",
+        "heading": "Aktualizacja statusu zamówienia",
+        "greeting": "Witaj",
+        "orderMessage": "Twoje zamówienie nr {{orderNumber}} zostało zaktualizowane. Nowy status:",
+        "orderDetails": "Aby zobaczyć szczegóły zamówienia, kliknij w poniższy link",
+        "linkText": "Zobacz zamówienie",
+        "thanks": "Dziękujemy za zakupy!",
+        "signature": "Z poważaniem, Zespół wsparcia"
+      }
+    }
+  }
+  

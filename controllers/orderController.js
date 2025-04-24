@@ -1,5 +1,8 @@
 const Order = require('../models/Order');
 const Product = require('../models/Product');
+const { sendTrackingNumberEmail } = require('../services/emailService');
+const { sendOrderStatusUpdateEmail } = require('../services/emailService');
+
 
 const createOrder = async (req, res) => {
   try {
@@ -7,6 +10,7 @@ const createOrder = async (req, res) => {
       user,
       userFirstName,
       userLastName,
+      userEmail,
       items,
       deliveryType,
       homeDelivery,
@@ -15,6 +19,7 @@ const createOrder = async (req, res) => {
       total,
       orderNumber,
       comment,
+      lang,
     } = req.body;
 
     if (deliveryType === "Home" && !homeDelivery) {
@@ -28,6 +33,7 @@ const createOrder = async (req, res) => {
       user,
       userFirstName,
       userLastName,
+      userEmail,
       items,
       deliveryType,
       homeDelivery: deliveryType === "Home" ? homeDelivery : undefined,
@@ -36,6 +42,7 @@ const createOrder = async (req, res) => {
       total,
       orderNumber,
       comment: comment || '',
+      lang,
     });
 
     res.status(201).json(newOrder);
@@ -79,7 +86,6 @@ const getOrders = async (req, res) => {
 
 const updateOrderStatus = async (req, res) => {
   const { orderNumber, _id } = req.params;
-  const orderId = orderNumber || _id; 
   const { status } = req.body;
 
   try {
@@ -93,13 +99,23 @@ const updateOrderStatus = async (req, res) => {
 
     order.status = status;
 
-    // Убедимся, что userFirstName и userLastName заполнены
     if (!order.userFirstName || !order.userLastName) {
       order.userFirstName = order.userFirstName || 'Deleted';
       order.userLastName = order.userLastName || 'User';
     }
 
     await order.save();
+
+    // Email уведомление
+    if (order.userEmail) {
+      await sendOrderStatusUpdateEmail(
+        order.userEmail,
+        `${order.userFirstName} ${order.userLastName}`,
+        order.orderNumber,
+        status,
+        order.lang || 'en'
+      );
+    }
 
     res.status(200).json({ message: 'Order status updated', order });
   } catch (error) {
@@ -139,8 +155,26 @@ const updateOrderItem = async (req, res) => {
         return res.status(400).json({ message: "Invalid delivery type for tracking number" });
       }
 
+      const previousTracking = order.novaPoshtaDelivery?.trackingNumber;
       order.novaPoshtaDelivery.trackingNumber = trackingNumber;
+
+      // Только если это новый трекинг-номер, отправляем email
+      if (trackingNumber !== previousTracking && order.userEmail) {
+        try {
+          await sendTrackingNumberEmail(
+            order.userEmail,
+            `${order.userFirstName || 'Deleted'} ${order.userLastName || 'User'}`,
+            order.orderNumber,
+            trackingNumber,
+            order.lang || 'en'
+          );
+        } catch (emailError) {
+          console.error("Failed to send tracking email:", emailError);
+          // Не прерываем основной процесс
+        }
+      }
     }
+
 
     await order.save();
 

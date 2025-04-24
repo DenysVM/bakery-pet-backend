@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{translations.title}}</title>
+  </head>
+  <body>
+    <h1>{{translations.heading}}</h1>
+    <p>{{translations.greeting}}, {{username}}!</p>
+
+    <p>
+      {{translations.orderMessagePrefix}}
+      <strong>{{orderNumber}}</strong>
+      {{translations.orderMessageMiddle}}
+      <strong>{{orderStatus}}</strong>
+
+      {{#if trackingNumber}}<br />{{translations.trackingNumber}}:
+        <strong>{{trackingNumber}}</strong>{{/if}}.
+    </p>
+
+    <p>{{translations.orderDetails}}</p>
+    <p>
+      <a href="{{orderLink}}">
+        {{translations.linkText}}
+      </a>
+    </p>
+
+    <p>{{translations.thanks}}</p>
+    <p>{{translations.signature}}</p>
+  </body>
+</html>

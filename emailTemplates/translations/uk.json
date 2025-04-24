@@ -1,0 +1,25 @@
+{
+    "orderStatus": {
+      "title": "Ваше замовлення оновлено",
+      "heading": "Оновлення замовлення — Cozy Bakery",
+      "greeting": "Вітаємо",
+      "orderMessage": "Статус вашого замовлення змінено на",
+      "trackingNumber": "Номер ТТН",
+      "orderDetails": "Переглянути деталі замовлення за посиланням:",
+      "linkText": "Переглянути замовлення",
+      "thanks": "Дякуємо, що обираєте Cozy Bakery!",
+      "signature": "З повагою, команда Cozy Bakery"
+    },
+    "trackingNumber": {
+      "title": "Додано номер ТТН",
+      "heading": "Нова ТТН — Cozy Bakery",
+      "greeting": "Вітаємо",
+      "orderMessage": "До вашого замовлення додано номер ТТН",
+      "trackingNumber": "Номер ТТН",
+      "orderDetails": "Відстежити доставку можна за посиланням:",
+      "linkText": "Перейти до замовлення",
+      "thanks": "Сподіваємося, вам сподобається наша випічка!",
+      "signature": "З любов’ю, команда Cozy Bakery"
+    }
+  }
+  

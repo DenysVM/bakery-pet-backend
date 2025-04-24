@@ -1,0 +1,33 @@
+{
+  "emails": {
+    "registration": {
+      "title": "Registration Confirmation",
+      "heading": "Welcome!",
+      "greeting": "Hello",
+      "message": "Thank you for registering with our service. To activate your account, please confirm your email.",
+      "linkText": "Confirm Email",
+      "note": "If you did not register, please ignore this email.",
+      "signature": "Best regards, Support Team"
+    },
+    "resetPassword": {
+      "title": "Password Reset",
+      "heading": "Password Reset",
+      "greeting": "Hello",
+      "message": "We received a request to reset the password for your account.",
+      "linkText": "Reset Password",
+      "note": "If you did not request a password reset, please ignore this email.",
+      "signature": "Best regards, Support Team"
+    },
+    "orderStatus": {
+      "title": "Order Status Update",
+      "heading": "Order Status Update",
+      "greeting": "Hello",
+      "orderMessagePrefix": "Your order",
+      "orderMessageMiddle": "has been updated. New status:",
+      "orderDetails": "To view order details, click the link below",
+      "linkText": "View Order",
+      "thanks": "Thank you for your purchase!",
+      "signature": "Best regards, Support Team"
+    }
+  }
+}
