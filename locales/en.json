@@ -28,6 +28,17 @@
       "linkText": "View Order",
       "thanks": "Thank you for your purchase!",
       "signature": "Best regards, Support Team"
+    },
+    "trackingNumber": {
+      "title": "Tracking number added",
+      "heading": "Your order has been shipped",
+      "greeting": "Hello",
+      "trackingNumber": "Tracking number",
+      "orderMessage": "Your order {{orderNumber}} has been shipped.",
+      "orderDetails": "You can track your parcel at the link below:",
+      "linkText": "View order",
+      "thanks": "Thank you for shopping with us!",
+      "signature": "Sincerely, Cozy Bakery"
     }
   }
 }

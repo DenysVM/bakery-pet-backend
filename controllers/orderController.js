@@ -1,7 +1,10 @@
 const Order = require('../models/Order');
 const Product = require('../models/Product');
-const { sendTrackingNumberEmail } = require('../services/emailService');
-const { sendOrderStatusUpdateEmail } = require('../services/emailService');
+const {
+  sendOrderStatusUpdateEmail,
+  sendTrackingNumberEmail,
+} = require('../services/emailService');
+
 
 
 const createOrder = async (req, res) => {
